@@ -69,3 +69,43 @@ const check = [
 ];
 
 console.log(amountOfCheck(check));
+
+//  make an additional function that will allow you to form an object as in the previous task from an array of arrays
+
+function makeACheck (arrayOfGoods) {
+  let newCheck =[];
+  
+  if (arrayOfGoods.length === 0) return newCheck;  
+
+  for (const item of arrayOfGoods) {
+    const product = {
+      name: item[0],
+      amount: item[1],
+      price: item[2], 
+    };
+
+    newCheck.push(product);
+  };
+
+  return newCheck;
+};
+
+const arrayOfGoods = [
+  [
+    'milk',
+    3,
+    32,
+  ],
+  [
+    'bread',
+    2,
+    20,
+  ],
+  [
+    'meat',
+    1,
+    180,
+  ],
+];
+
+console.log(makeACheck(arrayOfGoods));
