@@ -239,3 +239,62 @@ form.addEventListener('submit', (event) => {
   </tr>
   `)
 });
+
+table.addEventListener('click', (event) => {
+  if ((!event.target.matches('.destroy'))
+    && (!event.target.matches('.update'))
+    && (!event.target.matches('.save'))) {
+    return;
+  }
+  const item = event.target.closest('.adminPanel__table-item');
+  const userForQuestion = currentUsers.find(user => user.id === +item.dataset.userId);
+  const changeUserName = item.querySelector('.adminPanel__changeUserName');
+  const showUserName = item.querySelector('.adminPanel__showUserName');
+  const updateButton = item.querySelector('.update');
+  const saveButton = item.querySelector('.save');
+  const dateOfChangeField = item.querySelector('.adminPanel__dateOfChange');
+  const dateOfCreationField = item.querySelector('.adminPanel__dateOfCreation');
+  const showUserDepartment = item.querySelector('.adminPanel__showUserDepartment');
+  const changeUserDepartment = item.querySelector('.adminPanel__changeUserDepartment')
+
+  if ((event.target.matches('.destroy'))) {
+    const result = confirm(`are you sure you want to delete user ${userForQuestion.userName}?`);
+
+    if (!result) {
+      return;
+    }
+
+    item.remove();
+
+    currentUsers = currentUsers.filter(user => user.id !== +item.dataset.userId);
+
+    localStorage.removeItem(`${userForQuestion.id}`);
+  }
+
+  if ((event.target.matches('.update'))) {
+    changeUserName.classList.toggle('hidden');
+    showUserName.classList.toggle('hidden');
+    updateButton.classList.toggle('hidden');
+    saveButton.classList.toggle('hidden');
+    showUserDepartment.classList.toggle('hidden');
+    changeUserDepartment.classList.toggle('hidden');
+  }
+
+  if ((event.target.matches('.save'))) {
+    changeUserName.classList.toggle('hidden');
+    showUserName.classList.toggle('hidden');
+    updateButton.classList.toggle('hidden');
+    saveButton.classList.toggle('hidden');
+    showUserDepartment.classList.toggle('hidden');
+    changeUserDepartment.classList.toggle('hidden');
+
+    showUserName.textContent = changeUserName.value;
+    showUserDepartment.textContent = changeUserDepartment.value;
+    dateOfChangeField.textContent = dateBuilder(new Date());
+
+    localStorage.setItem(`${userForQuestion.id}`,
+      `${changeUserName.value}#${changeUserDepartment.value}#${dateOfCreationField.textContent}#${dateBuilder(new Date())}`
+    )
+  }
+  
+});
