@@ -1,0 +1,12 @@
+
+.hidden {
+  display: none;
+}
+
+.adminPanel__changeUserName {
+  width: 150px;
+}
+
+.adminPanel__showUserName {
+  width: 150px;
+}
