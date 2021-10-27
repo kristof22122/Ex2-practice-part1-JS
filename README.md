@@ -1,0 +1,1 @@
+# Ex2-practice-part1-JS
