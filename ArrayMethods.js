@@ -109,3 +109,26 @@ const arrayOfGoods = [
 ];
 
 console.log(makeACheck(arrayOfGoods));
+
+// filter the object by fields that include the letter "a" in the name (the function takes an object
+
+function filterTheObject (currentObject) {
+  const keys = Object.keys(currentObject);
+  const newObject = {};
+  const filterKeys = keys.filter(key => key.includes('a'));
+
+  for (const item of filterKeys) {
+    newObject[item] = currentObject[item];
+  };
+
+  return newObject;
+};
+
+const currentObject = {
+  a: 'asd',
+  asd: [1,2,3],
+  bret: 'qwe',
+  bta: 123,
+};
+
+console.log(filterTheObject(currentObject));
