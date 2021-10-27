@@ -95,6 +95,34 @@ class CustomArray {
       }
     }
   }
+
+  some(callback) {
+    if(callback === undefined) {
+      return undefined;
+    }
+
+    for(let i = 0; i < this.arr.length; i++) {
+      if(callback(this.arr[i], i, this.arr)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  every(callback) {
+    if(callback === undefined) {
+      return undefined;
+    }
+
+    for(let i = 0; i < this.arr.length; i++) {
+      if(!callback(this.arr[i], i, this.arr)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 };
 
 const a = new CustomArray(1, 2, 3);
@@ -119,3 +147,9 @@ console.log(findA);
 
 const mapB = b.map(item => item ** 2);
 console.log(mapB);
+
+const someA = a.some(item => item === 1);
+console.log(someA);
+
+const everyB = b.every(item => item > 2);
+console.log(everyB);
