@@ -11,11 +11,10 @@ class CustomArray {
     let index = 0;
 
     for (let i = numbersLen; i < numbersLen + len; i++) {
-      this.arr[i] = item[index];
-      index++;
+      this.arr[i] = item[index++];
     }
 
-    return this.length;
+    return this.arr.length;
   }
 
   pop() {
@@ -25,7 +24,7 @@ class CustomArray {
 
     const lastItem = this.arr[this.arr.length - 1];
 
-    this.arr.length = this.arr.length - 1;
+    this.arr.length -= 1;
 
     return lastItem;
   }
@@ -35,19 +34,16 @@ class CustomArray {
 
     let context = this.arr;
 
-    if(callback === undefined) {
+    if(typeof callback !== 'function') {
       return undefined;
     }
 
-    if (arguments.length > 1) {
+    if (thisArg) {
       context = thisArg;
     }
 
     for (let i = 0; i < stop; i++) {
-      if (this.arr[i] !== undefined) {
-        callback.call(context, this.arr[i], i, this.arr);
-      }
-      
+      callback.call(context, this.arr[i], i, this.arr);     
     }
 
     return undefined;
@@ -56,7 +52,7 @@ class CustomArray {
   map(callback) {
     const result = [];
 
-    if(callback === undefined) {
+    if(typeof callback !== 'function') {
       return undefined;
     }
 
@@ -71,7 +67,7 @@ class CustomArray {
   filter(callback) {
     const result = [];
 
-    if(callback === undefined) {
+    if(typeof callback !== 'function') {
       return undefined;
     }
 
@@ -85,7 +81,7 @@ class CustomArray {
   }
 
   find(callback) {
-    if(callback === undefined) {
+    if(typeof callback !== 'function') {
       return undefined;
     }
 
@@ -97,7 +93,7 @@ class CustomArray {
   }
 
   some(callback) {
-    if(callback === undefined) {
+    if(typeof callback !== 'function') {
       return undefined;
     }
 
@@ -111,7 +107,7 @@ class CustomArray {
   }
 
   every(callback) {
-    if(callback === undefined) {
+    if(typeof callback !== 'function') {
       return undefined;
     }
 
