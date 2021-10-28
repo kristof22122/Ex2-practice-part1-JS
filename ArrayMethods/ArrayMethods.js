@@ -5,13 +5,12 @@
 function findAverage1(arr) {
     if (arr.length === 0) return 0;
     
-    let numberOfElements = 0;
+    let numberOfElements = Math.trunc(arr.length / 2);
     let sum = 0;
   
-    for (let i = 0; i < arr.length; i += 2) {
+    for (let i = 1; i < arr.length; i += 2) {
       if (arr[i] % 2 === 1) {
         sum += arr[i];
-        numberOfElements++;
       };
     };
   
@@ -24,10 +23,18 @@ function findAverage1(arr) {
   
   function findAverage2(arr) {
     if (arr.length === 0) return 0;
+
+    let numberOfElements = Math.trunc(arr.length / 2);
+
+    const result = arr.reduce((start, number, index) => {
+      if (index % 2 === 1) {
+        return number + start;
+      } 
+      
+      return start;      
+    }, 0);
   
-    const filterArr = arr.filter((i, index) => ((i % 2) === 1) && (index % 2 === 0));
-  
-    return filterArr.reduce((start, number) => start + number, 0) / filterArr.length;
+    return result / numberOfElements;
   }
 
 const arr = [5, 7, 10, 1, 1, 11, 11, 11];
@@ -43,7 +50,9 @@ function amountOfCheck (check) {
   if (check.length === 0) return sum;
 
   check.forEach(element => {
-    sum += Math.round(element.amount * element.price);
+    const { amount, price } = element;
+
+    sum += Math.round(amount * price);
   });
 
   // return sum.toFixed(2);
@@ -73,19 +82,20 @@ console.log(amountOfCheck(check));
 //  make an additional function that will allow you to form an object as in the previous task from an array of arrays
 
 function makeACheck (arrayOfGoods) {
-  let newCheck =[];
+  const newCheck =[];
   
-  if (arrayOfGoods.length === 0) return newCheck;  
+  if (arrayOfGoods.length === 0) return newCheck;
 
-  for (const item of arrayOfGoods) {
+  arrayOfGoods.forEach(good => {
+    const [ name, amount, price] = good;
     const product = {
-      name: item[0],
-      amount: item[1],
-      price: item[2], 
+      name: name,
+      amount: amount,
+      price: price, 
     };
 
     newCheck.push(product);
-  };
+  });
 
   return newCheck;
 };
