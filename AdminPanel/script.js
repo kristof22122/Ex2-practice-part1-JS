@@ -24,8 +24,8 @@ const getLocalStorageUsers = () => {
 
 let UsersFromLocalStorage = getLocalStorageUsers();
 
-if (UsersFromLocalStorage) {
-  localStorageUsers = [...UsersFromLocalStorage.map(user => user)];
+if (Array.isArray(UsersFromLocalStorage)) {
+  localStorageUsers = [...UsersFromLocalStorage];
 };
 
 initUsers(UsersFromLocalStorage);
@@ -53,7 +53,10 @@ const dateBuilder = (currentDate) => {
   return `${day}, ${date} ${month} ${year}, ${hours}:${minutes}`;
 };
 
-function initUsers(Users) {
+function initUsers(users) {
+  if (!Array.isArray(users)) {
+    return;
+  }
   const tableBody = table.querySelector('.adminPanel__tableBody');
 
   if (tableBody) {
@@ -65,63 +68,63 @@ function initUsers(Users) {
 
   table.append(newTableBody);
 
-  if (!Users) return;
+  if (!users) return;
 
-  for (const user of Users) {
+  users.forEach(user => {
     newTableBody.insertAdjacentHTML('beforeend', `
-      <tr
-        class="adminPanel__table-item"
-        data-user-id="${user.id}"
-      >
-        <td>
-          <label 
-            class="adminPanel__showUserName"
-          >
-            ${user.userName}
-          </label>
-        </td>
-        <td>
-          <label 
-            class="adminPanel__showUserDepartment"
-          >
-            ${user.userDepartment}
-          </label>
-        </td>
-        <td>
-          <label 
-            class="adminPanel__dateOfCreation"
-          >
-            ${user.DateOfCreation}
-          </label>
-        </td>
-        <td>
-          <label 
-            class="adminPanel__dateOfChange"
-          >
-            ${user.DateOfChange}
-          </label>
-        </td>
-        <td>
-          <button
-            type="button"
-            class="update"
-            id="updateItem"
-          >
-            Update
-          </button>
-        </td>
-        <td>
-          <button
-            type="button"
-            class="destroy"
-            id="deleteItem"
-          >
-            delete
-          </button>
-        </td>
-      </tr>
-    `);
-  };
+    <tr
+      class="adminPanel__table-item"
+      data-user-id="${user.id}"
+    >
+      <td>
+        <label 
+          class="adminPanel__showUserName"
+        >
+          ${user.userName}
+        </label>
+      </td>
+      <td>
+        <label 
+          class="adminPanel__showUserDepartment"
+        >
+          ${user.userDepartment}
+        </label>
+      </td>
+      <td>
+        <label 
+          class="adminPanel__dateOfCreation"
+        >
+          ${user.DateOfCreation}
+        </label>
+      </td>
+      <td>
+        <label 
+          class="adminPanel__dateOfChange"
+        >
+          ${user.DateOfChange}
+        </label>
+      </td>
+      <td>
+        <button
+          type="button"
+          class="update"
+          id="updateItem"
+        >
+          Update
+        </button>
+      </td>
+      <td>
+        <button
+          type="button"
+          class="destroy"
+          id="deleteItem"
+        >
+          delete
+        </button>
+      </td>
+    </tr>
+  `);
+  });
 }
 
 form.addEventListener('submit', (event) => {
@@ -177,7 +180,8 @@ table.addEventListener('click', (event) => {
     return;
   }
   const item = event.target.closest('.adminPanel__table-item');
-  const userForQuestion = localStorageUsers.find(user => user.id === +item.dataset.userId);
+  const itemUserId = +item.dataset.userId;
+  const userForQuestion = localStorageUsers.find(user => user.id === itemUserId);
 
   if ((event.target.matches('#deleteItem'))) {
     const result = confirm(`are you sure you want to delete user ${userForQuestion.userName}?`);
@@ -188,7 +192,7 @@ table.addEventListener('click', (event) => {
 
     item.remove();
 
-    localStorageUsers = localStorageUsers.filter(user => user.id !== +item.dataset.userId);
+    localStorageUsers = localStorageUsers.filter(user => user.id !== itemUserId);
 
     setLocalStorageUsers(localStorageUsers);
   }
