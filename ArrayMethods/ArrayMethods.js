@@ -27,7 +27,7 @@ function findAverage1(arr) {
     let numberOfElements = Math.trunc(arr.length / 2);
 
     const result = arr.reduce((start, number, index) => {
-      if (index % 2 === 1) {
+      if ((index % 2 === 1) && (number % 2 === 1)) {
         return number + start;
       } 
       
@@ -37,7 +37,7 @@ function findAverage1(arr) {
     return result / numberOfElements;
   }
 
-const arr = [5, 7, 10, 1, 1, 11, 11, 11];
+const arr = [5, 7, 10, 1, 1, 12, 11, 11];
 
 console.log(findAverage1(arr));
 console.log(findAverage2(arr));
@@ -89,9 +89,9 @@ function makeACheck (arrayOfGoods) {
   arrayOfGoods.forEach(good => {
     const [ name, amount, price] = good;
     const product = {
-      name: name,
-      amount: amount,
-      price: price, 
+      name,
+      amount,
+      price, 
     };
 
     newCheck.push(product);
@@ -127,9 +127,9 @@ function filterTheObject (currentObject) {
   const newObject = {};
   const filterKeys = keys.filter(key => key.includes('a'));
 
-  for (const item of filterKeys) {
+  filterKeys.forEach(item => {
     newObject[item] = currentObject[item];
-  };
+  });
 
   return newObject;
 };
