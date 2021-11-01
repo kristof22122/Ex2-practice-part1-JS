@@ -19,9 +19,8 @@ const setLocalStorageUsers = (newLocalStorageUsers) => {
 }
 
 const getLocalStorageUsers = () => {
-  const retrievedObject = localStorage.getItem('localStorageUsers');
-
   try {
+    const retrievedObject = localStorage.getItem('localStorageUsers');
     const parseRetrievedObject = JSON.parse(retrievedObject);
 
     if (Array.isArray(parseRetrievedObject)) {
