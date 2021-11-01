@@ -4,31 +4,41 @@ const root = document.querySelector('.adminPanel');
 const userNameField = root.querySelector('.adminPanel__userName');
 const form = root.querySelector('.adminPanel__form');
 const table = root.querySelector('.adminPanel__table');
-let userUpdateId = null; 
+let userUpdateId = null;
 
 // localStorage.clear();
 
-let localStorageUsers = [
-
-];
-
 const setLocalStorageUsers = (newLocalStorageUsers) => {
-  localStorage.setItem('localStorageUsers', JSON.stringify(newLocalStorageUsers));
+  try {
+    const stringifyNewLocalStorageUsers = JSON.stringify(newLocalStorageUsers);
+    localStorage.setItem('localStorageUsers', stringifyNewLocalStorageUsers);
+  } catch(error) {
+    console.log('Error set Local Storage!');
+    console.log(error);
+  }
 }
 
 const getLocalStorageUsers = () => {
   const retrievedObject = localStorage.getItem('localStorageUsers');
-  
-  return JSON.parse(retrievedObject);
+
+  try {
+    const parseRetrievedObject = JSON.parse(retrievedObject);
+
+    if (Array.isArray(parseRetrievedObject)) {
+      return parseRetrievedObject;
+    }
+
+    return [];
+  } catch(error) {
+    console.log('Error get Local Storage!');
+    console.log(error);
+    return [];
+  }
 };
 
-let UsersFromLocalStorage = getLocalStorageUsers();
+let localStorageUsers = getLocalStorageUsers();
 
-if (Array.isArray(UsersFromLocalStorage)) {
-  localStorageUsers = [...UsersFromLocalStorage];
-};
-
-initUsers(UsersFromLocalStorage);
+initUsers();
 
 const timeFormat = (time) => {
   if (time < 10) {
@@ -53,24 +63,23 @@ const dateBuilder = (currentDate) => {
   return `${day}, ${date} ${month} ${year}, ${hours}:${minutes}`;
 };
 
-function initUsers(users) {
-  if (!Array.isArray(users)) {
+function initUsers() {
+  if (!localStorageUsers) return;
+  if (!Array.isArray(localStorageUsers)) {
     return;
   }
   const tableBody = table.querySelector('.adminPanel__tableBody');
 
   if (tableBody) {
     tableBody.remove();
-  }  
+  }
 
   const newTableBody = document.createElement('tbody');
   newTableBody.className = 'adminPanel__tableBody';
 
   table.append(newTableBody);
 
-  if (!users) return;
-
-  users.forEach(user => {
+  localStorageUsers.forEach(user => {
     newTableBody.insertAdjacentHTML('beforeend', `
     <tr
       class="adminPanel__table-item"
@@ -136,7 +145,7 @@ form.addEventListener('submit', (event) => {
   form.elements.userDepartment.value = '';
 
   if (userUpdateId) {
-    localStorageUsers = [...localStorageUsers.map(user => {
+    localStorageUsers = localStorageUsers.map(user => {
       const {
         id,
         DateOfCreation,
@@ -150,11 +159,12 @@ form.addEventListener('submit', (event) => {
           DateOfCreation: DateOfCreation,
           DateOfChange: dateAdd,
         }
+
         return user;
       }
 
       return user;
-    })];
+    });
 
     userUpdateId = null;
   } else {
@@ -166,12 +176,13 @@ form.addEventListener('submit', (event) => {
       DateOfChange: dateAdd,
     }
 
-    localStorageUsers.push(userForLocalStorage);
-  };  
+    // localStorageUsers.push(userForLocalStorage);
+    localStorageUsers = [...localStorageUsers, userForLocalStorage];
+  };
 
   setLocalStorageUsers(localStorageUsers);
 
-  initUsers(localStorageUsers);
+  initUsers();
 });
 
 table.addEventListener('click', (event) => {
